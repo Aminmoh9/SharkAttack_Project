@@ -9,7 +9,7 @@ def extract_month(date):
         '%Y-%m-%d', '%Y/%m/%d', '%Y-%m-%d %H:%M:%S', '%d/%m/%Y', '%m/%d/%Y',
         '%B %d, %Y', '%b %d, %Y', '%d %B %Y', '%Y %b %d', '%Y %d %b', '%d %B %Y %H:%M:%S',
         '%Y-%m-%d %H:%M:%S',
-        '%d %b-%Y', '%d-%B %Y', '%B %Y', '%Y.%m.%d', '%d-%b-%Y', '%b-%Y', '%d%b%Y', '%Y', '%B %Y', '%d-%B-%Y', '%b%Y',
+        '%d %b-%Y', '%d-%B %Y', '%B %Y', '%Y.%m.%d', '%d-%b-%Y', '%b-%Y', '%d%b%Y', '%B %Y', '%d-%B-%Y', '%b%Y',
         '%B %Y', '%b %Y', '%d-%B-%Y', '%d-%b-%Y', '%B %Y', '%b %Y'
     ]
 
@@ -56,12 +56,12 @@ def extract_month(date):
         if season in date.lower():
             return month_num
 
-    # Check for year only
-    if re.fullmatch(r'\d{4}', date):
+    # Check for year only or year ranges
+    if re.fullmatch(r'\d{4}', date) or re.search(r'^\d{4}-\d{4}$|^\d{4}s$', date):
         return 0
 
-    # Find the first date
-    date_match = re.search(r'\d{1,2}-[A-Za-z]{3}-\d{4}|\d{1,2}\s[A-Za-z]{3}\s\d{4}|[A-Za-z]{3}-\d{4}|[A-Za-z]{3}\s\d{4}|\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2}|\d{1,2}\s[A-Za-z]{3}-\d{4}|\d{4}\.\d{2}\.\d{2}|\d{4}|\d{1,2}[A-Za-z]{3}\d{4}|[A-Za-z]{3}\d{4}|[A-Za-z]+\s\d{4}|[A-Za-z]+-\d{4}|\d{1,2}-[A-Za-z]+-\d{3}|\d{1,2}-[A-Za-z]{3}-\d{3}', date)
+    # Find the first date with a month
+    date_match = re.search(r'\d{1,2}-[A-Za-z]{3}-\d{4}|\d{1,2}\s[A-Za-z]{3}\s\d{4}|[A-Za-z]{3}-\d{4}|[A-Za-z]{3}\s\d{4}|\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2}|\d{1,2}\s[A-Za-z]{3}-\d{4}|\d{4}\.\d{2}\.\d{2}|\d{1,2}[A-Za-z]{3}\d{4}|[A-Za-z]{3}\d{4}|[A-Za-z]+\s\d{4}|[A-Za-z]+-\d{4}|\d{1,2}-[A-Za-z]+-\d{3}|\d{1,2}-[A-Za-z]{3}-\d{3}', date)
     if date_match:
         date = date_match.group(0)
     else:
@@ -122,3 +122,4 @@ def categorize_activity(activity):
         return "unknown"
     else:
         return "other activities"
+    
